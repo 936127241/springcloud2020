@@ -1,0 +1,73 @@
+server:
+  port: 2001
+
+
+spring:
+  application:
+    name: seata-order-service
+#  cloud:
+#    alibaba:
+#      seata:
+#        #自定义事务组名称需要与seata-server中的对应
+#        tx-service-group: yg_tx_group #与config.txt 中的service.vgroupMapping.yg_tx_group=default一致
+#        service:
+#          vgroup-mapping:
+#            yg_tx_group: default #与config.txt 中的service.vgroupMapping.yg_tx_group=default一致
+#          grouplist:
+#            default: localhost:8091 #seata 服务地址
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/seata_order?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
+    username: root
+    password: zz936127241
+
+
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: my_test_tx_group
+  enable-auto-data-source-proxy: false
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default
+    grouplist:
+      default: 127.0.0.1:8091
+    enable-degrade: false
+    disable-global-transaction: false
+  config:
+    type: nacos
+    nacos:
+      namespace: ac26d165-a05b-4fb2-a2b4-fdb727942e68
+      serverAddr: 127.0.0.1:8848
+      group: SEATA_GROUP
+      userName: nacos
+      password: nacos
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      userName: nacos
+      password: nacos
+      cluster: default
+      group: SEATA_GROUP
+      namespace: ac26d165-a05b-4fb2-a2b4-fdb727942e68
+      
+
+feign:
+  hystrix:
+    enabled: false
+
+logging:
+  level:
+    io:
+      seata: info
+
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+
+
